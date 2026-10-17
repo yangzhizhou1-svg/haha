@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0b0810">
+<title>Yang Kamu Cari Nggak Ada di Aku, Ya?</title>
+<style>
+:root{color-scheme:dark;--ink:#eee6f0;--muted:#9d91a4;--violet:#c6a1dc}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:#0b0810;color:var(--ink);font-family:Georgia,"Times New Roman",serif}
+body:before{content:"";position:fixed;inset:0;z-index:-1;background:radial-gradient(ellipse at 15% 12%,#542b6044,transparent 42%),radial-gradient(ellipse at 85% 78%,#29265044,transparent 46%);pointer-events:none}
+main{width:min(100% - 38px,680px);margin:auto;padding:15vh 0 70px}
+.eyebrow{font:10px/1.8 Arial,sans-serif;letter-spacing:4px;text-transform:uppercase;color:#b49ac1}
+h1{font-size:clamp(38px,8vw,68px);font-weight:400;line-height:1.12;letter-spacing:-1.5px;margin:28px 0}
+h1 em{color:var(--violet);font-weight:400}
+.intro{font:14px/2 Arial,sans-serif;color:var(--muted);max-width:390px}
+ .cover{margin:34px 0 0;overflow:hidden;border:1px solid #ffffff20;border-radius:5px;box-shadow:0 18px 55px #0008}
+.cover img{display:block;width:100%;height:auto;max-height:440px;object-fit:cover}
+button{margin-top:26px;border:1px solid #80648c;border-radius:40px;background:#211728;color:var(--ink);padding:14px 22px;font:11px Arial,sans-serif;letter-spacing:1.5px;cursor:pointer}
+button:active{transform:scale(.98)}
+#reading{display:none;margin-top:110px}
+#reading.open{display:block}
+.paragraph{white-space:pre-line;font-size:clamp(17px,3.8vw,19px);line-height:1.95;color:#d9d0dd;margin:0 0 24px;opacity:0;transform:translateY(18px);transition:opacity .9s ease,transform .9s ease;overflow-wrap:anywhere}
+.paragraph.visible{opacity:1;transform:translateY(0)}
+.paragraph:first-child{font-size:clamp(20px,4.5vw,24px);color:#e8d8ef}
+.paragraph:last-child{color:var(--violet)}
+.chapter-label{font:10px/1.8 Arial,sans-serif;letter-spacing:3px;text-transform:uppercase;color:#b49ac1;margin:0 0 28px}.rule{height:1px;background:linear-gradient(90deg,transparent,#6c4c78,transparent);margin:58px 0}
+footer{text-align:center;color:#796d80;font:11px/2 Arial,sans-serif;letter-spacing:1px;margin-top:80px}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.paragraph{transition:none;opacity:1;transform:none}}
+
+/* Pemutar musik */
+.music-player{margin:28px auto 0;padding:16px 18px;max-width:390px;border:1px solid #ffffff20;border-radius:14px;background:linear-gradient(135deg,#211728cc,#12101acc);text-align:center;box-shadow:0 12px 36px #0005;backdrop-filter:blur(10px)}
+.music-title{font:10px/1.8 Arial,sans-serif;letter-spacing:2px;text-transform:uppercase;color:#b49ac1;margin-bottom:8px}
+.music-controls{display:flex;align-items:center;justify-content:center;gap:12px}
+#musicToggle{margin:0;padding:10px 18px;letter-spacing:1px}
+.music-note{font:12px Arial,sans-serif;color:var(--muted)}
+button:disabled{opacity:.65;cursor:default}
+@media(max-width:480px){.music-player{padding:14px}.music-controls{gap:8px}}
+
+
+button {
+  transition: transform 0.5s ease,
+              background 0.5s ease,
+              box-shadow 0.5s ease;
+}
+
+button:active {
+  transform: scale(0.92);
+}
+
+button.blop {
+  animation: blop 0.5s ease;
+}
+
+@keyframes blop {
+  0%   { transform: scale(1); }
+  35%  { transform: scale(0.88); }
+  65%  { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+  
+button,
+a,
+input,
+textarea {
+  -webkit-tap-highlight-color: transparent;
+  outline: none;
+}
+
+button:focus,
+button:focus-visible,
+a:focus,
+a:focus-visible {
+  outline: none;
+  box-shadow: none;
+}
+
+button {
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+
+
+</style>
+</head>
+<body>
+<main>
+  <section id="hero">
+    <div class="eyebrow">sebuah tulisan yang tidak terkirim</div>
+    <h1>yang kamu cari<br>ternyata nggak ada di<br><em>aku, ya?</em></h1>
+    <p class="intro">Tentang seseorang yang datang, membuat harapan tumbuh, lalu kembali ke masa lalu.</p>
+    <section class="music-player" aria-label="Pemutar musik">
+      <div class="music-title">musik untuk menemani membaca</div>
+      <div class="music-controls">
+        <button id="musicToggle" type="button">▶ PUTAR LAGU</button>
+        <span class="music-note" id="musicStatus">belum diputar</span>
+      </div>
+      <audio id="musik" loop preload="none">
+        <source src="./lagu.mp3" type="audio/mpeg">
+      </audio>
+    </section>
+    <figure class="cover">
+      <img src="./suasana-danau.png" alt="Ilustrasi seseorang duduk di tepi danau, memandang dermaga dan perahu">
+    </figure>
+    <button id="start">BACA PERLAHAN ↓</button>
+  </section>
+  <article id="reading" aria-label="Narasi lengkap"></article>
+  <footer>untuk yang pernah berharap, lalu belajar pulang kepada diri sendiri</footer>
+  <footer>cr:ara form substack</footer>
+  <footer>made by:steven</footer>
+</main>
+<script>
+const story = "“Yang kamu cari ternyata nggak ada di aku, ya?”\nAku tidak pernah benar-benar tahu bagaimana harus menjawab pertanyaan itu. Bahkan, mungkin pertanyaan itu bukan untuk dijawab oleh siapa pun. Mungkin ia hanya perlu dibiarkan menggantung, seperti perasaan yang tidak pernah mendapatkan penjelasan yang cukup.\n\nSemuanya berawal dengan sederhana.\n\nKamu datang tanpa banyak rencana. Awalnya hanya percakapan biasa, kemudian menjadi kebiasaan. Dari sekadar bertukar cerita tentang hari masing-masing, menjadi seseorang yang mulai kutunggu kabarnya. Dari seseorang yang awalnya tidak terlalu kupikirkan, perlahan berubah menjadi seseorang yang keberadaannya mulai memiliki tempat di pikiranku.\n\nKamu yang mendekatiku lebih dulu.\nKamu yang memulai percakapan. Kamu yang membuatku terbiasa dengan kehadiranmu. Kamu yang perlahan membuat jarak di antara kita terasa semakin dekat. Aku tidak pernah memaksamu untuk datang. Aku juga tidak pernah meminta agar kamu memberikan perhatian lebih. Semuanya terjadi begitu saja.\n\nDan mungkin karena semuanya terasa begitu alami, aku tidak menyadari bahwa suatu hari nanti aku akan menjadi orang yang paling kesulitan menerima ketika semuanya berakhir.\n\nBeberapa bulan kita lalui dengan cerita yang mungkin bagi orang lain terlihat sederhana, tetapi bagiku memiliki arti.\n\nAku mulai mengenal kebiasaanmu. Aku mulai memahami cara kamu berbicara, hal-hal yang kamu sukai, cara kamu merespons ketika sedang tidak baik-baik saja. Aku mulai hafal hal-hal kecil tentangmu yang mungkin bahkan tidak kamu sadari pernah kucatat dalam ingatan.\n\nTanpa sadar, aku mulai memberikan ruang.\n\nBukan hanya ruang dalam percakapan, tetapi ruang dalam hati.\n\nAku mulai berpikir bahwa mungkin kali ini akan berbeda.\n\nMungkin seseorang yang datang dengan cara seperti ini memang benar-benar ingin tinggal.\n\nMungkin setelah sekian banyak pertemuan yang tidak pernah berhasil, akhirnya ada seseorang yang datang bukan hanya untuk singgah.\n\nAku tidak pernah menuntut kepastian terlalu cepat. Aku hanya menikmati apa yang sedang berjalan. Aku percaya bahwa sesuatu yang baik tidak perlu dipaksa untuk memiliki nama. Selama kita sama-sama menjaga, bukankah itu sudah cukup?\n\nNamun, ternyata tidak.\n\nPerlahan, sesuatu berubah.\n\nKamu mulai menjauh.\n\nPercakapan yang sebelumnya terasa mudah mulai terasa berat. Hal-hal yang dahulu kamu lakukan dengan sendirinya mulai menghilang. Kehadiranmu tidak lagi sama. Dan aku, yang pada awalnya berusaha memahami, akhirnya mulai bertanya-tanya.\n\nApa yang berubah?\n\nApakah aku melakukan sesuatu?\n\nApakah aku terlalu berharap?\n\nAtau sejak awal memang hanya aku yang menganggap semua ini memiliki arti?\n\nAku mencoba tidak bertanya terlalu banyak. Aku mencoba memberikan ruang. Aku mencoba meyakinkan diriku sendiri bahwa mungkin kamu sedang sibuk, mungkin ada hal lain yang sedang kamu pikirkan, mungkin aku hanya terlalu banyak berpikir.\n\nSampai akhirnya kamu benar-benar pergi.\n\nTidak ada perpisahan yang benar-benar jelas.\n\nTidak ada akhir yang terasa selesai.\n\nHanya jarak yang semakin panjang dan percakapan yang semakin sedikit, sampai akhirnya aku sadar bahwa seseorang yang beberapa bulan lalu begitu dekat denganku kini telah menjadi seseorang yang bahkan tidak lagi hadir dalam keseharianku.\n\nYang paling menyakitkan bukan hanya kepergianmu.\n\nMelainkan kenyataan bahwa setelah beberapa waktu, aku mengetahui alasan di baliknya.\n\nKamu kembali kepada seseorang dari masa lalumu. Seseorang yang ternyata masih memiliki tempat di dalam hatimu.\n\nSaat mengetahuinya, ada banyak hal yang ingin kutanyakan.\n\n“Apakah selama ini kamu memang masih menyimpan perasaan untuknya?”\n“Apakah selama mendekatiku, sebagian hatimu masih tertinggal di masa lalu?”\n“Apakah aku hanya menjadi tempat persinggahan ketika kamu belum menemukan jalan untuk kembali kepadanya?”\n“Atau mungkin kamu sendiri tidak pernah tahu apa yang sebenarnya kamu inginkan?”\nAku tidak tahu.\n\nDan mungkin aku memang tidak akan pernah tahu.\n\nNamun ada satu hal yang akhirnya kupahami: seseorang bisa datang kepadamu dengan begitu tulus, tetapi tetap tidak memilih untuk tinggal.\n\nBukan karena kamu tidak cukup baik.\n\nBukan karena kamu tidak layak dicintai.\n\nKadang-kadang, seseorang hanya datang dengan hati yang masih tertinggal pada orang lain.\n\nDan tidak peduli seberapa baik kamu memperlakukannya, kamu tidak akan pernah bisa mengisi tempat yang memang sejak awal bukan milikmu.\n\nItulah bagian yang paling sulit untuk diterima.\n\nKarena selama ini aku sempat berpikir bahwa jika aku cukup sabar, cukup mengerti, cukup baik, mungkin kamu akan melihatku sebagai seseorang yang layak untuk dipilih.\n\nTernyata cinta tidak bekerja seperti itu.\n\nKita tidak bisa membuat seseorang mencintai kita hanya karena kita telah memberikan yang terbaik.\n\nKita tidak bisa membuat seseorang melupakan masa lalunya hanya karena kita hadir di masa kininya.\n\nDan kita tidak bisa memaksa seseorang untuk tinggal hanya karena kita sudah membuka pintu selebar-lebarnya.\n\nPada akhirnya, kamu tetap memilih untuk kembali. Dan aku tetap menjadi seseorang yang harus belajar melepaskan.\n\nAda bagian dari diriku yang sempat merasa kalah.\n\nAku sempat membandingkan diriku dengan dia.\n\nApa yang dia punya yang tidak aku punya?\n\nApa yang membuatmu memilihnya kembali?\n\nApa yang membuatmu begitu mudah meninggalkanku?\n\nPertanyaan-pertanyaan itu datang berkali-kali, terutama pada malam-malam ketika semuanya terasa lebih sunyi.\n\nNamun semakin lama kupikirkan, semakin aku sadar bahwa mungkin pertanyaannya bukan tentang siapa yang lebih baik.\n\nMungkin memang bukan tentang aku atau dia.\n\nMungkin hatimu memang masih memiliki cerita yang belum selesai dengannya.\n\nDan jika demikian, aku tidak seharusnya memaksakan diriku menjadi akhir dari cerita yang sejak awal bukan milikku.\n\nAku pernah berpikir bahwa kehilanganmu berarti aku kehilangan seseorang yang penting.\n\nSekarang aku mulai melihatnya dari sisi yang berbeda.\n\nMungkin aku hanya kehilangan seseorang yang memang tidak ditakdirkan untuk tinggal.\n\nDan mungkin, kamu juga kehilangan seseorang yang sebenarnya bersedia tinggal. Aku tidak mengatakan ini untuk membuatmu merasa bersalah. Aku juga tidak ingin membenci masa lalu yang membuatmu kembali kepadanya.\n\nSetiap orang berhak memilih ke mana hatinya ingin pulang.\n\nJika ternyata rumahmu masih ada di masa lalu, maka mungkin aku memang bukan tempat yang seharusnya kamu tuju.\n\nHanya saja, ada satu hal yang ingin kutanyakan, meskipun mungkin tidak akan pernah benar-benar kusampaikan kepadamu.\n\n“Yang kamu cari nggak ada di aku, ya?”\nMungkin memang tidak ada.\nMungkin yang kamu cari adalah perasaan yang pernah kamu miliki bersamanya. Mungkin yang kamu cari adalah cerita yang belum selesai. Mungkin yang kamu cari adalah seseorang yang membuatmu merasa bahwa masa lalu masih layak untuk diperjuangkan.\n\nDan aku?\n\nAku hanya seseorang yang datang di antara masa lalu dan masa depanmu.\n\nSeseorang yang sempat kamu dekati.\n\nSeseorang yang sempat kamu buat berharap.\n\nSeseorang yang akhirnya harus belajar bahwa tidak semua kedekatan akan berakhir dengan kebersamaan.\nNamun aku tidak ingin menganggap waktu bersamamu sebagai kesalahan.\n\nKarena selama beberapa bulan itu, aku pernah bahagia.\n\nAku pernah merasa dihargai.\n\nAku pernah menikmati percakapan-percakapan kecil yang sekarang mungkin sudah tidak berarti bagimu, tetapi pernah menjadi bagian penting dari hari-hariku.\n\nAku tidak menyesal pernah mengenalmu.\n\nAku hanya berharap, jika suatu hari kamu mengingatku, kamu tidak mengingatku sebagai seseorang yang pernah menunggumu.\n\nIngatlah aku sebagai seseorang yang pernah hadir dengan tulus.\n\nSeseorang yang tidak pernah meminta terlalu banyak.\n\nSeseorang yang hanya ingin dipilih dengan cara yang sama seperti ia memilihmu.\n\nDan sekarang, aku ingin berhenti bertanya.\n\nBerhenti mencari alasan.\n\nBerhenti membandingkan diri.\n\nBerhenti mencari kekurangan dalam diriku hanya karena seseorang memilih orang lain.\n\nAku tidak ingin lagi bertanya apakah aku kurang cantik, kurang baik, kurang menarik, atau kurang apa pun.\n\nKarena mungkin masalahnya memang bukan tentang kekurangan.\n\nMungkin kamu hanya mencari sesuatu yang memang tidak ada di dalam diriku.\nDan tidak apa-apa.\nAku tidak harus menjadi sesuatu yang kamu cari.\nAku hanya perlu menjadi seseorang yang tidak kehilangan dirinya sendiri ketika seseorang pergi.\nJadi, kalau suatu hari nanti kamu benar-benar bahagia bersamanya, semoga aku juga sudah sampai pada titik di mana aku bisa mendengar kabar itu tanpa merasa hancur.\n\nSemoga aku bisa tersenyum dan berkata dalam hati,\n\n“Akhirnya kamu menemukan tempat yang ingin kamu tuju.”\n\nDan semoga setelah itu, aku juga bisa menemukan jalanku sendiri.\n\nBukan kembali kepadamu.\n\nBukan mencari pengganti.\n\nTetapi kembali kepada diriku sendiri.\n\nKarena mungkin selama ini aku terlalu sibuk bertanya mengapa kamu tidak memilihku, sampai lupa bahwa aku juga berhak memilih seseorang yang tidak perlu dibuat ragu untuk tinggal.\n\nJadi, untuk terakhir kalinya:\n\nYang kamu cari nggak ada di aku, ya?\nTidak apa-apa.\nAku mungkin bukan jawaban dari pencarianmu.\n\nTetapi suatu hari nanti, aku berharap bisa menjadi jawaban bagi diriku sendiri.\n\nDan ketika hari itu datang, aku tidak akan lagi menunggu seseorang untuk kembali.\n\nAku akan berjalan.\n\nPelan-pelan.\n\nSendiri, mungkin.";
+const reading = document.getElementById('reading');
+const sections = story.trim().split(/\n\s*\n/);
+const chapterMarkers = [
+  { at: 0, title: 'sebuah pertanyaan' },
+  { at: 7, title: 'ketika mulai berharap' },
+  { at: 20, title: 'saat semuanya berubah' },
+  { at: 35, title: 'jawaban yang kutemukan' },
+  { at: 51, title: 'belajar melepaskan' },
+  { at: 67, title: 'kembali kepada diri sendiri' }
+];
+sections.forEach((part, index) => {
+  const marker = chapterMarkers.find(item => item.at === index);
+  if (marker) {
+    const heading = document.createElement('div');
+    heading.className = 'chapter-label';
+    heading.textContent = marker.title;
+    reading.appendChild(heading);
+  }
+
+  const p = document.createElement('p');
+  p.className = 'paragraph';
+  p.textContent = part.trim();
+  reading.appendChild(p);
+
+  if ([6, 19, 34, 50, 66].includes(index)) {
+    const rule = document.createElement('div');
+    rule.className = 'rule';
+    reading.appendChild(rule);
+  }
+});
+const musik = document.getElementById('musik');
+const musicToggle = document.getElementById('musicToggle');
+const musicStatus = document.getElementById('musicStatus');
+musicToggle.addEventListener('click', async () => {
+  if (musik.paused) {
+    try {
+      await musik.play();
+      musicToggle.textContent = 'Ⅱ JEDA LAGU';
+      musicStatus.textContent = 'sedang diputar';
+    } catch (error) {
+      musicStatus.textContent = 'periksa file lagu.mp3';
+    }
+  } else {
+    musik.pause();
+    musicToggle.textContent = '▶ PUTAR LAGU';
+    musicStatus.textContent = 'dijeda';
+  }
+});
+musik.addEventListener('ended', () => {
+  musicToggle.textContent = '▶ PUTAR LAGU';
+  musicStatus.textContent = 'selesai';
+});
+
+document.getElementById('start').addEventListener('click', () => {
+  reading.classList.add('open');
+  document.getElementById('start').textContent = 'LANJUTKAN MEMBACA';
+  document.getElementById('start').disabled = true;
+  setTimeout(() => reading.scrollIntoView({behavior:'smooth',block:'start'}), 80);
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, {threshold:.12});
+  reading.querySelectorAll('.paragraph').forEach(p => observer.observe(p));
+});
+document.querySelectorAll('button').forEach(button => {
+  button.addEventListener('click', () => {
+    button.classList.remove('blop');
+    void button.offsetWidth;
+    button.classList.add('blop');
+  });
+});
+  
+</script>
+</body>
+</html>
